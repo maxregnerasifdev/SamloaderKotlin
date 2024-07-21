@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Build for Windows
+name: Build for Ubuntu
 
 on:
   release:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -34,9 +34,9 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-windows-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: ${{ runner.os }}-gradle-linux-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
-          ${{ runner.os }}-gradle-windows-
+          ${{ runner.os }}-gradle-linux-
     - name: Build with Gradle
       run: |
         ./gradlew createDistributable
@@ -46,24 +46,24 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: logs
-        path: ${{ github.workspace }}\desktop\build\compose\logs\
+        path: ${{ github.workspace }}/desktop/build/compose/logs/
     - name: Check Output Exists
-      run: dir -s ${{ github.workspace }}\desktop\build\compose\binaries\main\app\
+      run: ls -laR ${{ github.workspace }}/desktop/build/compose/binaries/main/app/
     - name: Create Release ZIP
       uses: papeloto/action-zip@v1
       with:
-        dest: 'Bifrost_Windows.zip'
-        files: desktop\build\compose\binaries\main\app\
-    - name: Upload Windows Executable
+        dest: 'Bifrost_Linux.zip'
+        files: desktop/build/compose/binaries/main/app/
+    - name: Upload Linux Executable
       if: ${{ always() }}
-      uses: actions/upload-artifact@v2.2.4
+      uses: actions/upload-artifact@v2
       with:
         name: Bifrost
-        path: ${{ github.workspace }}\desktop\build\compose\binaries\main\app\Bifrost\
+        path: ${{ github.workspace }}/desktop/build/compose/binaries/main/app/Bifrost/
     - name: Upload Release ZIP
       uses: ncipollo/release-action@v1
       with:
-        artifacts: 'Bifrost_Windows.zip'
+        artifacts: 'Bifrost_Linux.zip'
         token: ${{ secrets.GITHUB_TOKEN }}
         allowUpdates: true
         replacesArtifacts: false
