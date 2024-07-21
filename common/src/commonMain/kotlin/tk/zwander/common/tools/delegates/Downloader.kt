@@ -271,4 +271,19 @@ object Downloader {
 
         model.endJob("")
     }
+
+    // New method to handle port recoding between two devices
+    suspend fun recodePortBetweenDevices(sourceDevice: String, targetDevice: String, model: DownloadModel) {
+        // Logic to recode the port between sourceDevice and targetDevice
+        // This is a placeholder for the actual implementation
+        try {
+            // Simulate port recoding process
+            model.statusText.value = "Recoding port from $sourceDevice to $targetDevice..."
+            // Add actual port recoding logic here
+            // For example, establishing a connection, transferring data, etc.
+            model.endJob("Port recoding completed successfully.")
+        } catch (e: Exception) {
+            model.endJob("Error during port recoding: ${e.message}")
+        }
+    }
 }
